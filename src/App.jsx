@@ -148,7 +148,7 @@ const WhyNigeria = () => {
   );
 };
 
-const CostCalculator = () => {
+const CostCalculator = ({ onOpenModal }) => {
   const [roleCount, setRoleCount] = useState(1);
   
   // UK Costs (Based on Deck)
@@ -234,7 +234,10 @@ const CostCalculator = () => {
                That's enough budget to hire <span className="text-[#45B930] font-bold">{Math.floor(totalSavings / vantisTotalPerHead)} more</span> Vantis engineers.
              </p>
              <div className="mt-8 relative z-10">
-               <button className="px-8 py-3 bg-[#45B930] text-white font-bold rounded-md hover:bg-[#3ba328] transition-colors shadow-lg shadow-green-900/50">
+               <button 
+                 onClick={() => onOpenModal('engineering')}
+                 className="px-8 py-3 bg-[#45B930] text-white font-bold rounded-md hover:bg-[#3ba328] transition-colors shadow-lg shadow-green-900/50"
+               >
                  View Full Cost Breakdown
                </button>
              </div>
@@ -670,8 +673,6 @@ const Team = () => {
   );
 };
 
-// --- Footer Component (Corrected Links) ---
-
 const Footer = () => {
   // Use simple smooth scroll function for Footer links
   const scrollTo = (id) => {
@@ -741,39 +742,33 @@ const ResourceModal = ({ isOpen, onClose, type }) => {
   if (!isOpen) return null;
 
   const isBooking = type === 'booking';
+  
+  // Set default target URL if type is engineering (triggered by button)
   const isEngineering = type === 'engineering';
   
   const title = isBooking ? "Book a Strategy Call" : "Access the PDF Resource";
   const subtitle = isBooking 
     ? "Select a topic so we can prepare for our conversation."
-    : "Enter your details to unlock the full presentation.";
+    : "Please select your profile to view the relevant documentation.";
 
-  const [step, setStep] = useState(1);
-  const [email, setEmail] = useState('');
-  const [userRole, setUserRole] = useState('');
-
-  const handleNext = (e) => {
-    e.preventDefault();
+  const handleSelection = (role) => {
+    let targetUrl = "";
+    
     if (isBooking) {
-        // Direct to Booking Link based on role/choice
-        const meetingLink = "https://meetings-eu1.hubspot.com/william-wilson1"; 
-        window.open(meetingLink, '_blank');
-        onClose();
+        targetUrl = "https://meetings-eu1.hubspot.com/william-wilson1";
     } else {
-        // Simulate Lead Capture then redirect to PDF
-        // In real app, post to HubSpot API here
-        setStep(2);
-        setTimeout(() => {
-            // Updated Redirect Logic with actual Hubspot URLs
-            const targetUrl = isEngineering 
-                ? "https://eu1.hubs.ly/H0r9HT60" 
-                : "https://eu1.hubs.ly/H0r9HSD0";
-            
-            window.open(targetUrl, '_blank');
-            onClose();
-            setStep(1); // Reset
-        }, 1500);
+        // Route based on role
+        if (role === 'recruiter') {
+            targetUrl = "https://eu1.hubs.ly/H0r9HSD0";
+        } else {
+            // Employer / Engineering
+            targetUrl = "https://eu1.hubs.ly/H0r9HT60";
+        }
     }
+    
+    // Open in new tab and close modal
+    window.open(targetUrl, '_blank');
+    onClose();
   };
 
   return (
@@ -791,64 +786,43 @@ const ResourceModal = ({ isOpen, onClose, type }) => {
         <div className="p-8">
            <p className="text-gray-600 mb-6">{subtitle}</p>
 
-           {step === 1 && (
-             <form onSubmit={handleNext} className="space-y-4">
-                {!isBooking && (
-                   <div>
-                     <label className="block text-sm font-medium text-gray-700 mb-1">Business Email</label>
-                     <input 
-                       type="email" 
-                       required 
-                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#04AcD9] focus:border-[#04AcD9] outline-none"
-                       placeholder="name@company.com"
-                       value={email}
-                       onChange={(e) => setEmail(e.target.value)}
-                     />
-                   </div>
-                )}
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {isBooking ? "What would you like to discuss?" : "I am best described as..."}
-                  </label>
-                  <div className="space-y-2">
-                    <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                      <input 
-                        type="radio" 
-                        name="role" 
-                        value="recruiter" 
-                        className="h-4 w-4 text-[#04AcD9] focus:ring-[#04AcD9]"
-                        onChange={(e) => setUserRole(e.target.value)}
-                        required
-                      />
-                      <span className="ml-3 font-medium text-gray-700">Recruitment Agency Owner/Director</span>
-                    </label>
-                    <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                      <input 
-                        type="radio" 
-                        name="role" 
-                        value="employer" 
-                        className="h-4 w-4 text-[#04AcD9] focus:ring-[#04AcD9]"
-                        onChange={(e) => setUserRole(e.target.value)}
-                        required
-                      />
-                      <span className="ml-3 font-medium text-gray-700">Hiring Manager / CTO</span>
-                    </label>
-                  </div>
-                </div>
+           <div className="space-y-4">
+              {isBooking ? (
+                  <Button variant="primary" className="w-full justify-center" onClick={() => handleSelection('general')}>
+                    View Calendar Availability
+                  </Button>
+              ) : (
+                  <>
+                    <button 
+                        onClick={() => handleSelection('recruiter')}
+                        className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#45B930] hover:bg-green-50 transition-all text-left flex items-center group"
+                    >
+                        <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#45B930] group-hover:border-[#45B930]">
+                            <UserPlus size={20} />
+                        </div>
+                        <div>
+                            <div className="font-bold text-gray-900">Recruitment Agency</div>
+                            <div className="text-sm text-gray-500">I want to monetise unfillable roles</div>
+                        </div>
+                        <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#45B930]" size={20} />
+                    </button>
 
-                <Button variant="primary" className="w-full mt-6">
-                  {isBooking ? "View Calendar Availability" : "Unlock & Download PDF"}
-                </Button>
-             </form>
-           )}
-
-           {step === 2 && (
-             <div className="text-center py-8">
-               <div className="w-12 h-12 border-4 border-[#04AcD9] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-               <p className="text-gray-600">Verifying and redirecting...</p>
-             </div>
-           )}
+                    <button 
+                        onClick={() => handleSelection('employer')}
+                        className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#04AcD9] hover:bg-blue-50 transition-all text-left flex items-center group"
+                    >
+                        <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#04AcD9] group-hover:border-[#04AcD9]">
+                            <Building size={20} />
+                        </div>
+                        <div>
+                            <div className="font-bold text-gray-900">Direct Employer</div>
+                            <div className="text-sm text-gray-500">I need to scale engineering capacity</div>
+                        </div>
+                        <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#04AcD9]" size={20} />
+                    </button>
+                  </>
+              )}
+           </div>
         </div>
       </div>
     </div>
@@ -878,7 +852,8 @@ const App = () => {
         <div id="why-nigeria">
            <WhyNigeria />
         </div>
-        <CostCalculator />
+        {/* Passed onOpenModal prop here */}
+        <CostCalculator onOpenModal={handleOpenModal} />
         <Solutions onOpenModal={handleOpenModal} />
         <InfrastructureSection />
         <DatabaseTeaser />
