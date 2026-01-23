@@ -148,6 +148,7 @@ const WhyNigeria = () => {
   );
 };
 
+// Updated CostCalculator to accept onOpenModal prop
 const CostCalculator = ({ onOpenModal }) => {
   const [roleCount, setRoleCount] = useState(1);
   
@@ -539,7 +540,7 @@ const Solutions = ({ onOpenModal }) => {
   );
 };
 
-const DatabaseTeaser = () => {
+const DatabaseTeaser = ({ onOpenModal }) => {
   return (
     <div id="database" className="py-24 bg-black relative overflow-hidden">
       <div className="absolute inset-0 opacity-20">
@@ -592,7 +593,10 @@ const DatabaseTeaser = () => {
               ))}
             </div>
             <div className="mt-8 text-center">
-               <button className="text-[#45B930] text-sm font-medium hover:text-white transition-colors">
+               <button 
+                 onClick={() => onOpenModal('database')}
+                 className="text-[#45B930] text-sm font-medium hover:text-white transition-colors"
+               >
                  Get notified when we launch &rarr;
                </button>
             </div>
@@ -736,20 +740,46 @@ const Footer = () => {
   );
 };
 
+// --- HubSpot Form Component ---
+const HubSpotForm = () => {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://js-eu1.hsforms.net/forms/embed/146286128.js';
+    script.defer = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  return (
+    <div 
+      className="hs-form-frame" 
+      data-region="eu1" 
+      data-form-id="e7650c20-8db3-44f2-a774-34214a7fdb4b" 
+      data-portal-id="146286128"
+    ></div>
+  );
+};
+
 // --- Modal Component ---
 
 const ResourceModal = ({ isOpen, onClose, type }) => {
   if (!isOpen) return null;
 
   const isBooking = type === 'booking';
+  const isDatabase = type === 'database';
   
   // Set default target URL if type is engineering (triggered by button)
   const isEngineering = type === 'engineering';
   
-  const title = isBooking ? "Book a Strategy Call" : "Access the PDF Resource";
+  const title = isBooking ? "Book a Strategy Call" : isDatabase ? "Join the Waitlist" : "Access the PDF Resource";
   const subtitle = isBooking 
     ? "Select a topic so we can prepare for our conversation."
-    : "Please select your profile to view the relevant documentation.";
+    : isDatabase 
+      ? "Get notified when the African Talent Platform launches."
+      : "Please select your profile to view the relevant documentation.";
 
   const handleSelection = (role) => {
     let targetUrl = "";
@@ -784,45 +814,52 @@ const ResourceModal = ({ isOpen, onClose, type }) => {
         </div>
 
         <div className="p-8">
-           <p className="text-gray-600 mb-6">{subtitle}</p>
+           {/* If it's the database modal, just show the HubSpot form */}
+           {isDatabase ? (
+             <HubSpotForm />
+           ) : (
+             <>
+               <p className="text-gray-600 mb-6">{subtitle}</p>
 
-           <div className="space-y-4">
-              {isBooking ? (
-                  <Button variant="primary" className="w-full justify-center" onClick={() => handleSelection('general')}>
-                    View Calendar Availability
-                  </Button>
-              ) : (
-                  <>
-                    <button 
-                        onClick={() => handleSelection('recruiter')}
-                        className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#45B930] hover:bg-green-50 transition-all text-left flex items-center group"
-                    >
-                        <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#45B930] group-hover:border-[#45B930]">
-                            <UserPlus size={20} />
-                        </div>
-                        <div>
-                            <div className="font-bold text-gray-900">Recruitment Agency</div>
-                            <div className="text-sm text-gray-500">I want to monetise unfillable roles</div>
-                        </div>
-                        <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#45B930]" size={20} />
-                    </button>
+               <div className="space-y-4">
+                  {isBooking ? (
+                      <Button variant="primary" className="w-full justify-center" onClick={() => handleSelection('general')}>
+                        View Calendar Availability
+                      </Button>
+                  ) : (
+                      <>
+                        <button 
+                            onClick={() => handleSelection('recruiter')}
+                            className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#45B930] hover:bg-green-50 transition-all text-left flex items-center group"
+                        >
+                            <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#45B930] group-hover:border-[#45B930]">
+                                <UserPlus size={20} />
+                            </div>
+                            <div>
+                                <div className="font-bold text-gray-900">Recruitment Agency</div>
+                                <div className="text-sm text-gray-500">I want to monetise unfillable roles</div>
+                            </div>
+                            <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#45B930]" size={20} />
+                        </button>
 
-                    <button 
-                        onClick={() => handleSelection('employer')}
-                        className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#04AcD9] hover:bg-blue-50 transition-all text-left flex items-center group"
-                    >
-                        <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#04AcD9] group-hover:border-[#04AcD9]">
-                            <Building size={20} />
-                        </div>
-                        <div>
-                            <div className="font-bold text-gray-900">Direct Employer</div>
-                            <div className="text-sm text-gray-500">I need to scale engineering capacity</div>
-                        </div>
-                        <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#04AcD9]" size={20} />
-                    </button>
-                  </>
-              )}
-           </div>
+                        <button 
+                            onClick={() => handleSelection('employer')}
+                            className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#04AcD9] hover:bg-blue-50 transition-all text-left flex items-center group"
+                        >
+                            <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#04AcD9] group-hover:border-[#04AcD9]">
+                                <Building size={20} />
+                            </div>
+                            <div>
+                                <div className="font-bold text-gray-900">Direct Employer</div>
+                                <div className="text-sm text-gray-500">I need to scale engineering capacity</div>
+                            </div>
+                            <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#04AcD9]" size={20} />
+                        </button>
+                      </>
+                  )}
+               </div>
+             </>
+           )}
         </div>
       </div>
     </div>
@@ -856,7 +893,7 @@ const App = () => {
         <CostCalculator onOpenModal={handleOpenModal} />
         <Solutions onOpenModal={handleOpenModal} />
         <InfrastructureSection />
-        <DatabaseTeaser />
+        <DatabaseTeaser onOpenModal={handleOpenModal} />
         <Team />
       </main>
 
