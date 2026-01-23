@@ -23,7 +23,8 @@ import {
   Cpu,
   Layers,
   Calculator,
-  FileText
+  FileText,
+  Mail
 } from 'lucide-react';
 
 const VANTIS_COLORS = {
@@ -607,7 +608,7 @@ const DatabaseTeaser = ({ onOpenModal }) => {
   );
 };
 
-const TeamMember = ({ name, role, linkedIn, image }) => (
+const TeamMember = ({ name, role, linkedIn, email, image }) => (
   <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 text-center hover:-translate-y-2 transition-transform duration-300 group">
     {/* Image Container with fixed dimensions for consistency */}
     <div className="w-32 h-32 mx-auto mb-6 relative">
@@ -631,15 +632,24 @@ const TeamMember = ({ name, role, linkedIn, image }) => (
     <h3 className="text-xl font-bold text-gray-900 mb-1">{name}</h3>
     <p className="text-[#04AcD9] font-medium mb-6 uppercase text-sm tracking-wide">{role}</p>
     
-    <a 
-      href={linkedIn} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="inline-flex items-center justify-center px-4 py-2 bg-gray-50 text-gray-600 rounded-full hover:bg-[#0077b5] hover:text-white transition-all duration-200 text-sm font-medium"
-    >
-      <Linkedin className="w-4 h-4 mr-2" />
-      Connect
-    </a>
+    <div className="flex flex-col space-y-3">
+        <a 
+          href={linkedIn} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center px-4 py-2 bg-gray-50 text-gray-600 rounded-full hover:bg-[#0077b5] hover:text-white transition-all duration-200 text-sm font-medium"
+        >
+          <Linkedin className="w-4 h-4 mr-2" />
+          Connect
+        </a>
+        <a 
+          href={`mailto:${email}`}
+          className="inline-flex items-center justify-center px-4 py-2 bg-gray-50 text-gray-600 rounded-full hover:bg-[#45B930] hover:text-white transition-all duration-200 text-sm font-medium"
+        >
+          <Mail className="w-4 h-4 mr-2" />
+          Email
+        </a>
+    </div>
   </div>
 );
 
@@ -657,18 +667,21 @@ const Team = () => {
             name="Gordon Mitchell" 
             role="Chief Commercial Officer"
             linkedIn="https://www.linkedin.com/in/gordon-mitchell-527953b/"
+            email="gordon.mitchell@vantis.work"
             image="/Gordon_Mitchell_Vantis.jpg"
           />
           <TeamMember 
             name="William Wilson" 
             role="VP Sales"
             linkedIn="https://www.linkedin.com/in/will-wilson-b5469429/"
+            email="william.wilson@vantis.work"
             image="/William_Wilson_Vantis.png"
           />
           <TeamMember 
             name="Femi Sowande" 
             role="Head of Partnerships"
             linkedIn="https://www.linkedin.com/in/femi-sowande/"
+            email="femi.sowande@vantis.work"
             image="/Femi_Sowande_Vantis.png"
           />
         </div>
