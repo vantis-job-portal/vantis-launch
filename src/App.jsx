@@ -785,9 +785,15 @@ const ResourceModal = ({ isOpen, onClose, type }) => {
     let targetUrl = "";
     
     if (isBooking) {
-        targetUrl = "https://meetings-eu1.hubspot.com/william-wilson1";
+        // Different route based on role for Booking
+        if (role === 'recruiter') {
+            targetUrl = "https://meetings-eu1.hubspot.com/william-wilson1/wills-introduction-call-recruiter-";
+        } else {
+            // Employer / General Engineering
+            targetUrl = "https://meetings-eu1.hubspot.com/william-wilson1/introduction-call-engineering";
+        }
     } else {
-        // Route based on role
+        // Route based on role for PDF Downloads
         if (role === 'recruiter') {
             targetUrl = "https://eu1.hubs.ly/H0r9HSD0";
         } else {
@@ -822,41 +828,38 @@ const ResourceModal = ({ isOpen, onClose, type }) => {
                <p className="text-gray-600 mb-6">{subtitle}</p>
 
                <div className="space-y-4">
-                  {isBooking ? (
-                      <Button variant="primary" className="w-full justify-center" onClick={() => handleSelection('general')}>
-                        View Calendar Availability
-                      </Button>
-                  ) : (
-                      <>
-                        <button 
-                            onClick={() => handleSelection('recruiter')}
-                            className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#45B930] hover:bg-green-50 transition-all text-left flex items-center group"
-                        >
-                            <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#45B930] group-hover:border-[#45B930]">
-                                <UserPlus size={20} />
-                            </div>
-                            <div>
-                                <div className="font-bold text-gray-900">Recruitment Agency</div>
-                                <div className="text-sm text-gray-500">I want to monetise unfillable roles</div>
-                            </div>
-                            <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#45B930]" size={20} />
-                        </button>
+                  {/* Unified buttons for both Booking AND PDF Downloads */}
+                  <button 
+                      onClick={() => handleSelection('recruiter')}
+                      className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#45B930] hover:bg-green-50 transition-all text-left flex items-center group"
+                  >
+                      <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#45B930] group-hover:border-[#45B930]">
+                          <UserPlus size={20} />
+                      </div>
+                      <div>
+                          <div className="font-bold text-gray-900">Recruitment Agency</div>
+                          <div className="text-sm text-gray-500">
+                            {isBooking ? "I want to monetise unfillable roles" : "I want to monetise unfillable roles"}
+                          </div>
+                      </div>
+                      <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#45B930]" size={20} />
+                  </button>
 
-                        <button 
-                            onClick={() => handleSelection('employer')}
-                            className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#04AcD9] hover:bg-blue-50 transition-all text-left flex items-center group"
-                        >
-                            <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#04AcD9] group-hover:border-[#04AcD9]">
-                                <Building size={20} />
-                            </div>
-                            <div>
-                                <div className="font-bold text-gray-900">Direct Employer</div>
-                                <div className="text-sm text-gray-500">I need to scale engineering capacity</div>
-                            </div>
-                            <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#04AcD9]" size={20} />
-                        </button>
-                      </>
-                  )}
+                  <button 
+                      onClick={() => handleSelection('employer')}
+                      className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#04AcD9] hover:bg-blue-50 transition-all text-left flex items-center group"
+                  >
+                      <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#04AcD9] group-hover:border-[#04AcD9]">
+                          <Building size={20} />
+                      </div>
+                      <div>
+                          <div className="font-bold text-gray-900">Direct Employer</div>
+                          <div className="text-sm text-gray-500">
+                            {isBooking ? "I need to scale engineering capacity" : "I need to scale engineering capacity"}
+                          </div>
+                      </div>
+                      <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#04AcD9]" size={20} />
+                  </button>
                </div>
              </>
            )}
