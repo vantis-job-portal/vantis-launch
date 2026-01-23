@@ -391,7 +391,7 @@ const Navbar = ({ onOpenModal }) => {
         <div className="hidden md:flex items-center space-x-8">
           <button onClick={() => scrollToSection('solutions')} className="text-gray-600 hover:text-[#04AcD9] font-medium">Solutions</button>
           <button onClick={() => scrollToSection('why-nigeria')} className="text-gray-600 hover:text-[#04AcD9] font-medium">Why Nigeria</button>
-          <button onClick={() => scrollToSection('team')} className="text-gray-600 hover:text-[#04AcD9] font-medium">Leadership</button>
+          <button onClick={() => scrollToSection('database')} className="text-gray-600 hover:text-[#04AcD9] font-medium">Talent Platform</button>
           <Button variant="primary" onClick={() => onOpenModal('booking')} icon={Calendar}>
             Book Consultation
           </Button>
@@ -408,7 +408,7 @@ const Navbar = ({ onOpenModal }) => {
         <div className="md:hidden bg-white absolute top-full left-0 w-full shadow-lg border-t border-gray-100 p-4 flex flex-col space-y-4">
           <button onClick={() => scrollToSection('solutions')} className="text-left text-gray-800 font-medium py-2">Solutions</button>
            <button onClick={() => scrollToSection('why-nigeria')} className="text-left text-gray-800 font-medium py-2">Why Nigeria</button>
-          <button onClick={() => scrollToSection('team')} className="text-left text-gray-800 font-medium py-2">Leadership</button>
+          <button onClick={() => scrollToSection('database')} className="text-left text-gray-800 font-medium py-2">Talent Platform</button>
           <Button variant="primary" onClick={() => { setIsMobileMenuOpen(false); onOpenModal('booking'); }} className="w-full">
             Book Consultation
           </Button>
