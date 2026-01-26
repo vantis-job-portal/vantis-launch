@@ -364,7 +364,7 @@ const CostCalculator = ({ onOpenModal }) => {
           <div className="md:w-1/2 p-10 bg-white">
             <div className="flex items-center mb-6">
               <Calculator className="w-8 h-8 text-[#04AcD9] mr-3" />
-              <h3 className="text-2xl font-bold text-gray-900">The Efficiency Paradox</h3>
+              <h3 className="text-2xl font-bold text-gray-900">The Hiring Reality Check</h3>
             </div>
             <p className="text-gray-600 mb-8">
               Compare the Total Cost of Employment (TCE) for a Senior Developer in the UK vs. a Senior Vantis Squad Lead.
@@ -376,7 +376,9 @@ const CostCalculator = ({ onOpenModal }) => {
                 onChange={(e) => setRoleCount(Number(e.target.value))}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#45B930]"
               />
-              <div className="mt-2 text-center font-bold text-xl text-[#04AcD9]">{roleCount} {roleCount === 1 ? 'Engineer' : 'Engineers'}</div>
+              <div className="mt-2 text-center font-bold text-xl text-[#04AcD9]">
+                {roleCount} {roleCount === 1 ? 'Engineer' : 'Engineers'}
+              </div>
             </div>
             <div className="space-y-4">
                {/* UK Breakdown Block */}
@@ -402,7 +404,7 @@ const CostCalculator = ({ onOpenModal }) => {
                £{totalSavings.toLocaleString()}
              </div>
              <p className="text-gray-300 max-w-sm relative z-10 text-lg">
-               That's enough budget to hire <span className="text-[#45B930] font-bold">{Math.floor(totalSavings / vantisTotalPerHead)} more</span> Vantis engineers.
+               That's enough budget to hire <span className="text-[#45B930] font-bold">{Math.floor(totalSavings / vantisTotalPerHead)} more</span> Vantis {Math.floor(totalSavings / vantisTotalPerHead) === 1 ? 'engineer' : 'engineers'}.
              </p>
              <div className="mt-8 relative z-10">
                <button onClick={() => onOpenModal('engineering')} className="px-8 py-3 bg-[#45B930] text-white font-bold rounded-md hover:bg-[#3ba328] transition-colors shadow-lg shadow-green-900/50">
@@ -641,7 +643,7 @@ const DatabaseTeaser = ({ onOpenModal }) => {
           <p className="text-xl text-gray-400 mb-8 max-w-md">We are building the largest verified talent platform in Africa. Access thousands of pre-vetted profiles with a single subscription.</p>
           <div className="flex flex-col space-y-3">
             <div className="flex items-center text-gray-300"><Database className="w-5 h-5 mr-3 text-[#04AcD9]" /><span>Real-time availability status</span></div>
-            <div className="flex items-center text-gray-300"><CheckCircle className="w-5 h-5 mr-3 text-[#04AcD9]" /><span>Standardized technical assessments</span></div>
+            <div className="flex items-center text-gray-300"><CheckCircle className="w-5 h-5 mr-3 text-[#04AcD9]" /><span>Standardised technical assessments</span></div>
             <div className="flex items-center text-gray-300"><Globe className="w-5 h-5 mr-3 text-[#04AcD9]" /><span>Pan-African reach</span></div>
           </div>
         </div>
@@ -802,9 +804,9 @@ const App = () => {
         <Hero onNavigate={handleNavigate} />
         <TechTicker />
         <div id="why-nigeria"><WhyNigeria /></div>
-        <RiskCalculator />
         <TalentComparison />
         <CostCalculator onOpenModal={handleOpenModal} />
+        <RiskCalculator />
         <Solutions onOpenModal={handleOpenModal} />
         <InfrastructureSection />
         <DatabaseTeaser onOpenModal={handleOpenModal} />
