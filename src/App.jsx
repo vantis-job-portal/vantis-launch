@@ -39,6 +39,35 @@ const VANTIS_COLORS = {
 
 // --- Helper Components ---
 
+// NEW: Dedicated Logo Component for easy swapping
+const Logo = ({ light = false, className = '' }) => {
+  const [imageError, setImageError] = useState(false);
+  
+  // Direct Image Link provided:
+  const logoUrl = "https://i.postimg.cc/Wb87nSMZ/vantis-logo.png"; 
+
+  if (!imageError) {
+    return (
+      <img 
+        src={logoUrl} 
+        alt="Vantis" 
+        className={`h-12 w-auto object-contain ${className}`} 
+        onError={(e) => {
+          e.target.onerror = null; 
+          setImageError(true);
+        }}
+      />
+    );
+  }
+
+  // Default Text Logo (Fallback)
+  return (
+    <span className={`text-3xl font-extrabold tracking-tight ${light ? 'text-white' : 'text-black'} ${className}`}>
+      VANTIS<span className="text-[#45B930]">.</span>
+    </span>
+  );
+};
+
 const Button = ({ children, variant = 'primary', className = '', onClick, icon: Icon }) => {
   const baseStyle = "inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
   
@@ -582,9 +611,8 @@ const Navbar = ({ onOpenModal }) => {
     <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-4' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <div className="flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <span className={`text-3xl font-extrabold tracking-tight ${isScrolled ? 'text-black' : 'text-black'}`}>
-            VANTIS<span className="text-[#45B930]">.</span>
-          </span>
+          {/* UPDATED: Now using the Logo component */}
+          <Logo />
         </div>
         <div className="hidden md:flex items-center space-x-8">
           <button onClick={() => scrollToSection('solutions')} className="text-gray-600 hover:text-[#04AcD9] font-medium">Solutions</button>
@@ -756,7 +784,10 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           <div className="col-span-1 md:col-span-2">
-            <span className="text-3xl font-extrabold tracking-tight text-white mb-6 block">VANTIS<span className="text-[#45B930]">.</span></span>
+            {/* UPDATED: Now using the Logo component (light mode for dark background) */}
+            <div className="mb-6 block">
+              <Logo light={true} />
+            </div>
             <p className="text-gray-400 max-w-sm text-lg leading-relaxed">Africa's first true recruitment infrastructure. Scaling engineering capacity for the world.</p>
           </div>
           <div>
