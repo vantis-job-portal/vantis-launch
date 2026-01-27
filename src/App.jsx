@@ -249,7 +249,7 @@ const TalentComparison = () => {
   );
 };
 
-const RiskCalculator = () => {
+const RiskCalculator = ({ onOpenModal }) => {
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [answers, setAnswers] = useState({});
@@ -329,16 +329,73 @@ const RiskCalculator = () => {
                 {risk.text}
               </p>
               <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg mb-8 text-left text-sm text-gray-600">
-                <strong>Why this matters:</strong> Hiring overseas contractors directly (B2B) while treating them like employees can trigger "Permanent Establishment" rules, making your UK company liable for foreign corporate tax and labour disputes.
+                <strong>Why this matters:</strong> Hiring overseas contractors directly (B2B) while treating them like employees can trigger "Permanent Establishment" rules and "Strict Liability" under the Criminal Finances Act.
               </div>
-              <Button variant="primary" onClick={() => window.open("https://meetings-eu1.hubspot.com/william-wilson1", "_blank")}>
-                Book a Compliance Audit
-              </Button>
-              <button onClick={() => { setShowResult(false); setScore(0); setAnswers({}); }} className="block mx-auto mt-4 text-gray-400 text-sm hover:text-gray-600">
+              <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+                <Button variant="primary" onClick={() => window.open("https://meetings-eu1.hubspot.com/william-wilson1/compliance-audit-", "_blank")}>
+                    Book a Compliance Audit
+                </Button>
+                {/* Secondary Button for PDF Download */}
+                <button 
+                    onClick={() => onOpenModal('compliance')}
+                    className="text-gray-600 hover:text-red-600 font-medium underline"
+                >
+                    Download the 2026 Compliance Guide (PDF)
+                </button>
+              </div>
+              
+              <button onClick={() => { setShowResult(false); setScore(0); setAnswers({}); }} className="block mx-auto mt-8 text-gray-400 text-sm hover:text-gray-600">
                 Start Over
               </button>
             </div>
           )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Expanded SafetyComparison Section
+const SafetyComparison = () => {
+  return (
+    <div className="py-24 bg-white border-t border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+         <div className="max-w-4xl mx-auto">
+             <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">Safety is Cheaper than Risk</h3>
+             <div className="space-y-8">
+                {/* Direct Hire Bar */}
+                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                    <div className="flex justify-between text-lg font-medium text-gray-700 mb-2">
+                        <span>Direct Hire (The Gamble)</span>
+                        <span className="text-red-600 font-bold">Unknown Liability</span>
+                    </div>
+                    <div className="h-16 flex w-full rounded-xl overflow-hidden bg-gray-200 relative shadow-inner">
+                         <div className="h-full bg-gray-400 w-1/4 flex items-center justify-center text-white text-sm md:text-base font-bold relative z-10">Salary</div>
+                         <div className="h-full bg-red-500 w-3/4 flex items-center justify-center text-white text-sm md:text-base font-bold animate-pulse relative z-10">Potential Fines, Back-Tax & Legal Fees</div>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-2 italic">
+                      Risk factors: SARS/FIRS Audit, Unfair Dismissal Claims, Corporate Tax Nexus.
+                    </p>
+                </div>
+
+                {/* Vantis Hire Bar */}
+                <div className="bg-green-50 p-6 rounded-2xl border border-green-100">
+                    <div className="flex justify-between text-lg font-medium text-gray-700 mb-2">
+                        <span>Vantis Hire (The Guarantee)</span>
+                        <span className="text-[#45B930] font-bold">Fixed Low Cost</span>
+                    </div>
+                    <div className="h-16 flex w-full md:w-1/3 rounded-xl overflow-hidden bg-white shadow-md border border-gray-200">
+                         <div className="h-full bg-gray-400 w-2/3 flex items-center justify-center text-white text-sm md:text-base font-bold">Salary</div>
+                         <div className="h-full bg-[#45B930] w-1/3 flex items-center justify-center text-white text-sm md:text-base font-bold">Fee</div>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-2 italic">
+                       Total cost is fixed. No hidden liabilities. Compliance guaranteed.
+                    </p>
+                </div>
+             </div>
+             <p className="text-lg text-gray-600 mt-12 text-center max-w-2xl mx-auto">
+                Even with the Vantis management fee, your total cost is still ~40% less than a UK equivalent, but with <span className="font-bold text-gray-900">zero liability</span>.
+             </p>
         </div>
       </div>
     </div>
@@ -743,14 +800,25 @@ const ResourceModal = ({ isOpen, onClose, type }) => {
   if (!isOpen) return null;
   const isBooking = type === 'booking';
   const isDatabase = type === 'database';
-  const title = isBooking ? "Book a Strategy Call" : isDatabase ? "Join the Waitlist" : "Access the PDF Resource";
-  const subtitle = isBooking ? "Select a topic so we can prepare for our conversation." : isDatabase ? "Get notified when the African Talent Platform launches." : "Please select your profile to view the relevant documentation.";
+  const isCompliance = type === 'compliance';
+
+  const title = isBooking ? "Book a Strategy Call" : isDatabase ? "Join the Waitlist" : isCompliance ? "Download Compliance Guide" : "Access the PDF Resource";
+  const subtitle = isBooking 
+    ? "Select a topic so we can prepare for our conversation." 
+    : isDatabase 
+      ? "Get notified when the African Talent Platform launches." 
+      : isCompliance 
+        ? "Essential reading for UK Directors hiring overseas."
+        : "Please select your profile to view the relevant documentation.";
 
   const handleSelection = (role) => {
     let targetUrl = "";
     if (isBooking) {
         if (role === 'recruiter') { targetUrl = "https://meetings-eu1.hubspot.com/william-wilson1/wills-introduction-call-recruiter-"; } 
         else { targetUrl = "https://meetings-eu1.hubspot.com/william-wilson1/introduction-call-engineering"; }
+    } else if (isCompliance) {
+        // Updated Link
+        targetUrl = "https://eu1.hubs.ly/H0rhHNB0";
     } else {
         if (role === 'recruiter') { targetUrl = "https://eu1.hubs.ly/H0r9HSD0"; } 
         else { targetUrl = "https://eu1.hubs.ly/H0r9HT60"; }
@@ -772,16 +840,30 @@ const ResourceModal = ({ isOpen, onClose, type }) => {
              <>
                <p className="text-gray-600 mb-6">{subtitle}</p>
                <div className="space-y-4">
-                  <button onClick={() => handleSelection('recruiter')} className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#45B930] hover:bg-green-50 transition-all text-left flex items-center group">
-                      <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#45B930] group-hover:border-[#45B930]"><UserPlus size={20} /></div>
-                      <div><div className="font-bold text-gray-900">Recruitment Agency</div><div className="text-sm text-gray-500">{isBooking ? "I want to monetise unfillable roles" : "I want to monetise unfillable roles"}</div></div>
-                      <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#45B930]" size={20} />
-                  </button>
-                  <button onClick={() => handleSelection('employer')} className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#04AcD9] hover:bg-blue-50 transition-all text-left flex items-center group">
-                      <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#04AcD9] group-hover:border-[#04AcD9]"><Building size={20} /></div>
-                      <div><div className="font-bold text-gray-900">Direct Employer</div><div className="text-sm text-gray-500">{isBooking ? "I need to scale engineering capacity" : "I need to scale engineering capacity"}</div></div>
-                      <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#04AcD9]" size={20} />
-                  </button>
+                  {isCompliance ? (
+                      <Button variant="primary" className="w-full justify-center" onClick={() => handleSelection('general')}>
+                        Download PDF Guide
+                      </Button>
+                  ) : (
+                      <>
+                        <button 
+                            onClick={() => handleSelection('recruiter')}
+                            className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#45B930] hover:bg-green-50 transition-all text-left flex items-center group"
+                        >
+                            <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#45B930] group-hover:border-[#45B930]"><UserPlus size={20} /></div>
+                            <div><div className="font-bold text-gray-900">Recruitment Agency</div><div className="text-sm text-gray-500">{isBooking ? "I want to monetise unfillable roles" : "I want to monetise unfillable roles"}</div></div>
+                            <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#45B930]" size={20} />
+                        </button>
+                        <button 
+                            onClick={() => handleSelection('employer')}
+                            className="w-full p-4 border border-gray-200 rounded-xl hover:border-[#04AcD9] hover:bg-blue-50 transition-all text-left flex items-center group"
+                        >
+                            <div className="w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center mr-4 text-gray-500 group-hover:text-[#04AcD9] group-hover:border-[#04AcD9]"><Building size={20} /></div>
+                            <div><div className="font-bold text-gray-900">Direct Employer</div><div className="text-sm text-gray-500">{isBooking ? "I need to scale engineering capacity" : "I need to scale engineering capacity"}</div></div>
+                            <ArrowRight className="ml-auto text-gray-300 group-hover:text-[#04AcD9]" size={20} />
+                        </button>
+                      </>
+                  )}
                </div>
              </>
            )}
@@ -806,7 +888,8 @@ const App = () => {
         <div id="why-nigeria"><WhyNigeria /></div>
         <TalentComparison />
         <CostCalculator onOpenModal={handleOpenModal} />
-        <RiskCalculator />
+        <RiskCalculator onOpenModal={handleOpenModal} /> {/* Passed onOpenModal here */}
+        <SafetyComparison />
         <Solutions onOpenModal={handleOpenModal} />
         <InfrastructureSection />
         <DatabaseTeaser onOpenModal={handleOpenModal} />
